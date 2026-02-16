@@ -1,8 +1,8 @@
 package by.timofeyzaytsev.textcorrector.entity;
 
 
-import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskLanguage;
-import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskStatus;
+import by.timofeyzaytsev.textcorrector.entity.enums.Language;
+import by.timofeyzaytsev.textcorrector.entity.enums.TextPolishTaskStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,12 +21,12 @@ import java.util.UUID;
 
 @Entity
 @Builder
-@Table(name = "correction_tasks")
+@Table(name = "text_polish_tasks")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class CorrectionTask {
+public class TextPolishTask {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -36,8 +36,11 @@ public class CorrectionTask {
     private String text;
 
     @Column(nullable = false)
-    private CorrectionTaskLanguage language;
+    private Language language;
+
+    private String errorDescription;
 
     @Enumerated(EnumType.STRING)
-    private CorrectionTaskStatus status;
+    @Column(nullable = false)
+    private TextPolishTaskStatus status;
 }

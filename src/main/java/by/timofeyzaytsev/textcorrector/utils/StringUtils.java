@@ -24,10 +24,10 @@ public class StringUtils {
     }
 
     /**
-     * Разбивает текст на блоки указанного размера с сохранением целостности предложений
-     * @param text исходный текст
-     * @param blockSize максимальный размер блока в символах
-     * @return список блоков текста
+     * Splits text into blocks of the specified size while preserving sentence integrity.
+     * @param text : original text
+     * @param blockSize : maximum block size in characters
+     * @return list of text blocks
      */
     public static List<String> splitIntoBlocks(String text, int blockSize) {
         List<String> blocks = new ArrayList<>();
@@ -66,7 +66,7 @@ public class StringUtils {
     }
 
     /**
-     * Разбивает текст на предложения, сохраняя разделители и пробелы
+     * Splits text into sentences, preserving separators and spaces
      */
     private static List<String> splitSentencesKeepDelimiters(String text) {
         List<String> sentences = new ArrayList<>();
@@ -97,7 +97,7 @@ public class StringUtils {
     }
 
     /**
-     * Разбивает длинное предложение на части с учетом пробелов
+     * Breaks a long sentence into parts, taking into account spaces
      */
     private static List<String> splitLongSentenceWithSpaces(String sentence, int maxLength) {
         List<String> parts = new ArrayList<>();
@@ -131,7 +131,7 @@ public class StringUtils {
     }
 
     /**
-     * Разбивает текст по символам (крайний случай)
+     * Splits text by characters (extreme case)
      */
     private static List<String> splitByCharacters(String text, int maxLength) {
         List<String> parts = new ArrayList<>();

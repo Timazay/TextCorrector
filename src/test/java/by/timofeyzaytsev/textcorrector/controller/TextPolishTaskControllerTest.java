@@ -1,11 +1,11 @@
 package by.timofeyzaytsev.textcorrector.controller;
 
-import by.timofeyzaytsev.textcorrector.dto.request.CreateCorrectionTaskRequest;
-import by.timofeyzaytsev.textcorrector.dto.response.CreateCorrectionTaskResponse;
-import by.timofeyzaytsev.textcorrector.dto.response.FindCorrectionTaskResponse;
-import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskLanguage;
-import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskStatus;
-import by.timofeyzaytsev.textcorrector.service.TextCorrectorService;
+import by.timofeyzaytsev.textcorrector.dto.request.CreateTextPolishTaskRequest;
+import by.timofeyzaytsev.textcorrector.dto.response.CreateTextPolishTaskResponse;
+import by.timofeyzaytsev.textcorrector.dto.response.FindTextPolishTaskResponse;
+import by.timofeyzaytsev.textcorrector.entity.enums.Language;
+import by.timofeyzaytsev.textcorrector.entity.enums.TextPolishTaskStatus;
+import by.timofeyzaytsev.textcorrector.service.TextPolishTaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(TextCorrectorController.class)
-public class TextCorrectorControllerTest {
+@WebMvcTest(TextPolishTaskController.class)
+public class TextPolishTaskControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,26 +35,26 @@ public class TextCorrectorControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private TextCorrectorService textCorrectorService;
+    private TextPolishTaskService textPolishTaskService;
 
     @Test
     void createCorrectionTask_ShouldReturnTaskId_WhenRequestIsValid() throws Exception {
         // Arrange
-        CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
+        CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "Hello World",
-                CorrectionTaskLanguage.EN
+                Language.EN
         );
 
         UUID expectedTaskId = UUID.randomUUID();
-        CreateCorrectionTaskResponse response = new CreateCorrectionTaskResponse(expectedTaskId);
+        CreateTextPolishTaskResponse response = new CreateTextPolishTaskResponse(expectedTaskId);
 
-        when(textCorrectorService.createCorrectionTask(any(CreateCorrectionTaskRequest.class)))
+        when(textPolishTaskService.createCorrectionTask(any(CreateTextPolishTaskRequest.class)))
                 .thenReturn(response);
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/text/corrections")
+        mockMvc.perform(post("/api/v1/text-polish-tasks")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request) ))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.taskId").value(expectedTaskId.toString()));
     }
@@ -62,13 +62,13 @@ public class TextCorrectorControllerTest {
     @Test
     void createTextCorrectionTask_ShouldReturnBadRequest_WhenIsEmptyTask() throws Exception {
         // Arrange
-        CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
+        CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "",
-                CorrectionTaskLanguage.EN
+                Language.EN
         );
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/text/corrections")
+        mockMvc.perform(post("/api/v1/text-polish-tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -77,13 +77,13 @@ public class TextCorrectorControllerTest {
     @Test
     void createCorrectionTask_ShouldReturnBadRequest_WhenHasLessThenThreeLettersTask() throws Exception {
         // Arrange
-        CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
+        CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "as",
-                CorrectionTaskLanguage.EN
+                Language.EN
         );
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/text/corrections")
+        mockMvc.perform(post("/api/v1/text-polish-tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -92,13 +92,13 @@ public class TextCorrectorControllerTest {
     @Test
     void createCorrectionTask_ShouldReturnBadRequest_WhenHasNoLetterTask() throws Exception {
         // Arrange
-        CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
+        CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "123%&",
-                CorrectionTaskLanguage.EN
+                Language.EN
         );
 
         // Act & Assert
-        mockMvc.perform(post("/api/v1/text/corrections")
+        mockMvc.perform(post("/api/v1/text-polish-tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -108,45 +108,47 @@ public class TextCorrectorControllerTest {
     void findCorrectionTask_WhenTaskFinished_ShouldReturnResponseWithTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
-        FindCorrectionTaskResponse expectedResponse = new FindCorrectionTaskResponse(
+        FindTextPolishTaskResponse expectedResponse = new FindTextPolishTaskResponse(
                 "исправленный текст",
-                CorrectionTaskStatus.FINISHED
+                TextPolishTaskStatus.FINISHED,
+                null
         );
 
-        when(textCorrectorService.findCorrectionTask(testId))
+        when(textPolishTaskService.findCorrectionTask(testId))
                 .thenReturn(expectedResponse);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/text/corrections")
-                        .param("id", testId.toString())
+        mockMvc.perform(get("/api/v1/text-polish-tasks/" + testId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").value("исправленный текст"))
-                .andExpect(jsonPath("$.status").value("FINISHED"));
+                .andExpect(jsonPath("$.status").value("FINISHED"))
+                .andExpect(jsonPath("$.errorDescription").doesNotExist());
 
-        verify(textCorrectorService, times(1)).findCorrectionTask(testId);
+        verify(textPolishTaskService, times(1)).findCorrectionTask(testId);
     }
 
     @Test
     void findCorrectionTask_WhenTaskIsFailed_ShouldReturnResponseWithNullTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
-        FindCorrectionTaskResponse expectedResponse = new FindCorrectionTaskResponse(
+        FindTextPolishTaskResponse expectedResponse = new FindTextPolishTaskResponse(
                 null,
-                CorrectionTaskStatus.FAILED
+                TextPolishTaskStatus.FAILED,
+                "Something went wrong"
         );
 
-        when(textCorrectorService.findCorrectionTask(testId))
+        when(textPolishTaskService.findCorrectionTask(testId))
                 .thenReturn(expectedResponse);
 
         // Act & Assert
-        mockMvc.perform(get("/api/v1/text/corrections")
-                        .param("id", testId.toString())
+        mockMvc.perform(get("/api/v1/text-polish-tasks/" + testId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").doesNotExist())
-                .andExpect(jsonPath("$.status").value("FAILED"));
+                .andExpect(jsonPath("$.status").value("FAILED"))
+                .andExpect(jsonPath("$.errorDescription").value("Something went wrong"));
 
-        verify(textCorrectorService, times(1)).findCorrectionTask(testId);
+        verify(textPolishTaskService, times(1)).findCorrectionTask(testId);
     }
 }

@@ -2,7 +2,7 @@ package by.timofeyzaytsev.textcorrector.dto.response;
 
 import java.util.List;
 
-public record YandexSpellCheckResponse(
+public record YandexSpellerCheckResponse(
          int code,
          int pos,
          int row,

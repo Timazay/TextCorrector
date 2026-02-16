@@ -13,10 +13,10 @@ public record ErrorResponseDto(
 ) {
     public ErrorResponseDto(String errorCode, String message) {
         this(
-                ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(),
-                errorCode,
                 message,
-                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                errorCode,
+                LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+                ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString()
         );
     }
 }

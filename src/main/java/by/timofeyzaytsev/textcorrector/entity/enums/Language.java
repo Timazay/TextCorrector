@@ -2,16 +2,16 @@ package by.timofeyzaytsev.textcorrector.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-public enum CorrectionTaskLanguage {
+public enum Language {
     EN, RU;
 
     @JsonCreator
-    public static CorrectionTaskLanguage fromString(String value) {
+    public static Language fromString(String value) {
         if (value == null)
             return null;
 
         String normalized = value.trim().toUpperCase();
 
-        return CorrectionTaskLanguage.valueOf(normalized);
+        return Language.valueOf(normalized);
     }
 }

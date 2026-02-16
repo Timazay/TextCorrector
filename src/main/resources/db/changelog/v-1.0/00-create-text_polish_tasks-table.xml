@@ -4,14 +4,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <changeSet id="create-correction_tasks-table" author="Зайцев Тимофей">
+    <changeSet id="create-text_polish_tasks-table" author="Зайцев Тимофей">
         <preConditions onFail="HALT">
             <not>
-                <tableExists tableName="correction_tasks"/>
+                <tableExists tableName="text_polish_tasks"/>
             </not>
         </preConditions>
 
-        <createTable tableName="correction_tasks">
+        <createTable tableName="text_polish_tasks">
 
             <column name="id" type="UUID">
                 <constraints primaryKey="true"
@@ -26,6 +26,8 @@
             <column name="language" type="TINYINT">
                 <constraints nullable="false"/>
             </column>
+
+            <column name="error_description" type="VARCHAR(255)"/>
 
             <column name="status" type="VARCHAR(50)">
                 <constraints nullable="false"/>
