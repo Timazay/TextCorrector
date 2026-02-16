@@ -73,7 +73,7 @@ public class TextCorrectorServiceTest {
     }
 
     @Test
-    void findTextCorrection_WhenTaskFinished_ShouldReturnResponseWithTask() {
+    void findCorrectionTask_WhenTaskFinished_ShouldReturnResponseWithTask() {
         // Arrange
         UUID testId = UUID.randomUUID();
         CorrectionTask finishedTask = new CorrectionTask();
@@ -88,7 +88,7 @@ public class TextCorrectorServiceTest {
 
         when(correctionTaskRepository.findCorrectionTaskById(testId))
                 .thenReturn(Optional.of(finishedTask));
-        when(correctionTaskMapper.toFindTextCorrectionResponse(finishedTask))
+        when(correctionTaskMapper.toFindCorrectionTaskResponse(finishedTask))
                 .thenReturn(expectedResponse);
 
         // Act
@@ -101,12 +101,12 @@ public class TextCorrectorServiceTest {
         assertEquals(CorrectionTaskStatus.FINISHED, actualResponse.status());
 
         verify(correctionTaskRepository).findCorrectionTaskById(testId);
-        verify(correctionTaskMapper).toFindTextCorrectionResponse(finishedTask);
+        verify(correctionTaskMapper).toFindCorrectionTaskResponse(finishedTask);
         verifyNoMoreInteractions(correctionTaskRepository, correctionTaskMapper);
     }
 
     @Test
-    void findTextCorrection_WhenTaskNotFinished_ShouldReturnResponseWithNullTask() {
+    void findCorrectionTask_WhenTaskNotFinished_ShouldReturnResponseWithNullTask() {
         // Arrange
         UUID testId = UUID.randomUUID();
         CorrectionTask inProgressTask = new CorrectionTask();
@@ -121,7 +121,7 @@ public class TextCorrectorServiceTest {
 
         when(correctionTaskRepository.findCorrectionTaskById(testId))
                 .thenReturn(Optional.of(inProgressTask));
-        when(correctionTaskMapper.toFindTextCorrectionResponse(argThat(task ->
+        when(correctionTaskMapper.toFindCorrectionTaskResponse(argThat(task ->
                 task.getStatus() == CorrectionTaskStatus.PROCCESSING &&
                         task.getText() == null
         ))).thenReturn(expectedResponse);
@@ -135,14 +135,14 @@ public class TextCorrectorServiceTest {
         assertEquals(CorrectionTaskStatus.PROCCESSING, actualResponse.status());
 
         verify(correctionTaskRepository).findCorrectionTaskById(testId);
-        verify(correctionTaskMapper).toFindTextCorrectionResponse(argThat(task -> {
+        verify(correctionTaskMapper).toFindCorrectionTaskResponse(argThat(task -> {
             assertNull(task.getText());
             return true;
         }));
     }
 
     @Test
-    void findCorrection_Task_WhenTaskNotFound_ShouldThrowEntityNotFoundException() {
+    void findCorrectionTask_WhenTaskNotFound_ShouldThrowEntityNotFoundException() {
         // Arrange
         UUID testId = UUID.randomUUID();
         when(correctionTaskRepository.findCorrectionTaskById(testId))
@@ -157,6 +157,6 @@ public class TextCorrectorServiceTest {
         assertEquals("Task with id: " + testId + " not found", exception.getMessage());
 
         verify(correctionTaskRepository).findCorrectionTaskById(testId);
-        verify(correctionTaskMapper, never()).toFindTextCorrectionResponse(any());
+        verify(correctionTaskMapper, never()).toFindCorrectionTaskResponse(any());
     }
 }

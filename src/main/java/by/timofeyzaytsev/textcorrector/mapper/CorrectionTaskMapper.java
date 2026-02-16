@@ -21,7 +21,7 @@ public interface CorrectionTaskMapper {
     @Mapping(target = "lang", source = "task.language")
     YandexSpellCheckRequest toYandexSpellCheckRequest(CorrectionTask task, List<String> textArray, int options);
 
-    FindCorrectionTaskResponse toFindTextCorrectionResponse(CorrectionTask task);
+    FindCorrectionTaskResponse toFindCorrectionTaskResponse(CorrectionTask task);
 
     @Mapping(target = "status",
             expression = "java(by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskStatus.FINISHED)")

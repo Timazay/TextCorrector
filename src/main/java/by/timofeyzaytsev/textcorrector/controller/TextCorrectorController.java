@@ -23,12 +23,12 @@ public class TextCorrectorController {
     private final TextCorrectorService textCorrectorService;
 
     @PostMapping
-    public CreateCorrectionTaskResponse createTextCorrection(@Valid @RequestBody CreateCorrectionTaskRequest request) {
+    public CreateCorrectionTaskResponse createCorrectionTask(@Valid @RequestBody CreateCorrectionTaskRequest request) {
         return textCorrectorService.createCorrectionTask(request);
     }
 
     @GetMapping
-    public FindCorrectionTaskResponse findTextCorrection(@RequestParam UUID id) {
+    public FindCorrectionTaskResponse findCorrectionTask(@RequestParam UUID id) {
         return textCorrectorService.findCorrectionTask(id);
     }
 }

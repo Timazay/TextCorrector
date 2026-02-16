@@ -4,7 +4,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <!-- Основной changelog для таблицы correction_task -->
     <changeSet id="create-correction_tasks-table" author="Зайцев Тимофей">
         <preConditions onFail="HALT">
             <not>
@@ -12,7 +11,6 @@
             </not>
         </preConditions>
 
-        <!-- Создание таблицы -->
         <createTable tableName="correction_tasks">
 
             <column name="id" type="UUID">

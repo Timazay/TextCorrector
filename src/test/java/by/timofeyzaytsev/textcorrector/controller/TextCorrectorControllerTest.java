@@ -38,7 +38,7 @@ public class TextCorrectorControllerTest {
     private TextCorrectorService textCorrectorService;
 
     @Test
-    void createTextCorrection_ShouldReturnTaskId_WhenRequestIsValid() throws Exception {
+    void createCorrectionTask_ShouldReturnTaskId_WhenRequestIsValid() throws Exception {
         // Arrange
         CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
                 "Hello World",
@@ -60,7 +60,7 @@ public class TextCorrectorControllerTest {
     }
 
     @Test
-    void createTextCorrection_ShouldReturnBadRequest_WhenTextIsEmpty() throws Exception {
+    void createTextCorrectionTask_ShouldReturnBadRequest_WhenIsEmptyTask() throws Exception {
         // Arrange
         CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
                 "",
@@ -75,7 +75,7 @@ public class TextCorrectorControllerTest {
     }
 
     @Test
-    void createTextCorrection_ShouldReturnBadRequest_WhenTextHasLessThenThreeLetters() throws Exception {
+    void createCorrectionTask_ShouldReturnBadRequest_WhenHasLessThenThreeLettersTask() throws Exception {
         // Arrange
         CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
                 "as",
@@ -90,7 +90,7 @@ public class TextCorrectorControllerTest {
     }
 
     @Test
-    void createTextCorrection_ShouldReturnBadRequest_WhenTextHasNoLetter() throws Exception {
+    void createCorrectionTask_ShouldReturnBadRequest_WhenHasNoLetterTask() throws Exception {
         // Arrange
         CreateCorrectionTaskRequest request = new CreateCorrectionTaskRequest(
                 "123%&",
@@ -105,7 +105,7 @@ public class TextCorrectorControllerTest {
     }
 
     @Test
-    void findTextCorrection_WhenTaskFinished_ShouldReturnResponseWithText() throws Exception {
+    void findCorrectionTask_WhenTaskFinished_ShouldReturnResponseWithTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
         FindCorrectionTaskResponse expectedResponse = new FindCorrectionTaskResponse(
@@ -128,7 +128,7 @@ public class TextCorrectorControllerTest {
     }
 
     @Test
-    void findTextCorrection_WhenTaskIsFailed_ShouldReturnResponseWithNullText() throws Exception {
+    void findCorrectionTask_WhenTaskIsFailed_ShouldReturnResponseWithNullTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
         FindCorrectionTaskResponse expectedResponse = new FindCorrectionTaskResponse(

@@ -11,6 +11,6 @@ import java.util.List;
 @FeignClient(name = "yandexSpeller")
 public interface ExternalYandexSpellerApiClient {
 
-    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/checkTexts",consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     List<List<YandexSpellCheckResponse>> checkText(@RequestParam String text, @RequestParam String lang, @RequestParam int options);
 }

@@ -22,7 +22,7 @@ spring:
           yandexSpeller:
             read-timeout: 5000
             connect-timeout: 5000
-            url: https://speller.yandex.net/services/spellservice.json/checkTexts
+            url: ${YANDEX_SPELLER_ADDRESS}
 logging:
   level:
     org.springframework.web.servlet.DispatcherServlet: DEBUG

@@ -33,6 +33,6 @@ public class TextCorrectorService {
         if (!task.getStatus().equals(CorrectionTaskStatus.FINISHED))
             task.setText(null);
 
-        return correctionTaskMapper.toFindTextCorrectionResponse(task);
+        return correctionTaskMapper.toFindCorrectionTaskResponse(task);
     }
 }
