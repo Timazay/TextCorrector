@@ -1,6 +1,7 @@
 package by.timofeyzaytsev.textcorrector.handler;
 
 import by.timofeyzaytsev.textcorrector.dto.common.ErrorResponseDto;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +40,13 @@ public class GlobalExceptionHandler {
     public ErrorResponseDto handleConflict(Exception ex) {
         log.error(ex.getMessage(), ex);
         return new ErrorResponseDto("403", ex.getMessage());
+    }
+
+    @ExceptionHandler({
+            EntityNotFoundException.class
+    })
+    public ErrorResponseDto handleEntityNotFoundException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return new ErrorResponseDto("404", ex.getMessage());
     }
 }

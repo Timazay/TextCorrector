@@ -2,56 +2,62 @@ package by.timofeyzaytsev.textcorrector.service;
 
 import by.timofeyzaytsev.textcorrector.dto.request.YandexSpellCheckRequest;
 import by.timofeyzaytsev.textcorrector.dto.response.YandexSpellCheckResponse;
-import by.timofeyzaytsev.textcorrector.entity.CorrectionTask;
-import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskStatus;
-import by.timofeyzaytsev.textcorrector.feignclient.ExternalYandexSpellerApiClient;
+import by.timofeyzaytsev.textcorrector.client.ExternalYandexSpellerApiClient;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static by.timofeyzaytsev.textcorrector.utils.StringUtils.splitIntoBlocks;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class YandexSpellService {
 
     private final ExternalYandexSpellerApiClient externalYandexSpellerApiClient;
-    private static final int MAX_TEXT_LENGTH = 10000;
+    private static final int MAX_TEXT_LENGTH = 1000;
 
-    public void checkAndCorrectText(CorrectionTask task, YandexSpellCheckRequest request) {
-        List<List<YandexSpellCheckResponse>> responses =
-                externalYandexSpellerApiClient.checkText(request.text().getFirst(), request.lang());
+    /**
+     * Метод отправляет запрос к методу post checkText частями (если строка превышает 1000 символов)
+     * @return возвращает строку с исправленным текстом.
+     */
+    public String checkAndCorrectText(String task, YandexSpellCheckRequest request) {
+        List<String> list = splitIntoBlocks(task, MAX_TEXT_LENGTH);
+        return list.stream()
+                .map(textBlock -> {
+                    List<List<YandexSpellCheckResponse>> responses =
+                            externalYandexSpellerApiClient.checkText(textBlock, request.lang(), request.options());
 
-        for (List<YandexSpellCheckResponse> response : responses) {
-            if (!responses.isEmpty()) {
-                processResponse(task, response);
-                return;
-            }
+                    List<YandexSpellCheckResponse> flatResponses = responses.stream()
+                            .flatMap(List::stream)
+                            .collect(Collectors.toList());
 
-            task.setStatus(CorrectionTaskStatus.FINISHED);
-        }
+                    return processResponse(textBlock, flatResponses);
+                })
+                .collect(Collectors.joining());
     }
 
-    private void processResponse(CorrectionTask task, List<YandexSpellCheckResponse> corrections) {
-        try {
-            StringBuilder correctedText = new StringBuilder(task.getText());
+    /**
+     * Метод исправления текста на основе ответа яндекс апи
+     *
+     * @param task        исходный текст
+     * @param corrections список исправлений от API
+     * @return исправленный текст
+     */
+    private String processResponse(String task, List<YandexSpellCheckResponse> corrections) {
+        StringBuilder correctedText = new StringBuilder(task);
 
-            corrections.stream()
-                    .filter(c -> c.s() != null && !c.s().isEmpty())
-                    .sorted(Comparator.comparing(YandexSpellCheckResponse::pos).reversed())
-                    .forEach(c -> correctedText.replace(
-                            c.pos(),
-                            c.pos() + c.len(),
-                            c.s().getFirst()
-                    ));
+        corrections.stream()
+                .filter(c -> c.s() != null && !c.s().isEmpty())
+                .sorted(Comparator.comparing(YandexSpellCheckResponse::pos).reversed())
+                .forEach(c -> correctedText.replace(
+                        c.pos(),
+                        c.pos() + c.len(),
+                        c.s().getFirst()
+                ));
 
-            task.setText(correctedText.toString());
-            task.setStatus(CorrectionTaskStatus.FINISHED);
-        } catch (Exception e) {
-            log.error("Error processing Yandex API response", e);
-            task.setStatus(CorrectionTaskStatus.FAILED);
-        }
+        return correctedText.toString();
     }
 }

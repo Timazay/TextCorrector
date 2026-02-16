@@ -6,13 +6,16 @@ import by.timofeyzaytsev.textcorrector.entity.enums.CorrectionTaskStatus;
 import by.timofeyzaytsev.textcorrector.mapper.CorrectionTaskMapper;
 import by.timofeyzaytsev.textcorrector.repository.CorrectionTaskRepository;
 import by.timofeyzaytsev.textcorrector.service.YandexSpellService;
+import by.timofeyzaytsev.textcorrector.utils.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class CorrectionTaskScheduler {
 
@@ -30,13 +33,22 @@ public class CorrectionTaskScheduler {
         if (correctionTasks.isEmpty())
             return;
 
-        for (CorrectionTask task : correctionTasks) {
+        correctionTasks.forEach(this::processSingleTask);
+    }
+
+    private void processSingleTask(CorrectionTask task) {
+        try {
             int options = calculateOptions(task.getText());
             checkAndChangeStatus(task);
-            YandexSpellCheckRequest request = correctionTaskMapper.toYandexSpellCheckRequest(task, List.of(task.getText()), options);
-            yandexSpellService.checkAndCorrectText(task, request);
-            correctionTaskRepository.save(task);
+            YandexSpellCheckRequest request = correctionTaskMapper
+                    .toYandexSpellCheckRequest(task, List.of(task.getText()), options);
+            String text = yandexSpellService.checkAndCorrectText(task.getText(), request);
+            correctionTaskMapper.toCorrectionTask(task, text);
+        } catch (Exception e) {
+            log.error("Error processing Yandex API response, task with id: {}", task.getId(), e);
+            task.setStatus(CorrectionTaskStatus.FAILED);
         }
+        correctionTaskRepository.save(task);
     }
 
     private void checkAndChangeStatus(CorrectionTask task) {
@@ -47,8 +59,8 @@ public class CorrectionTaskScheduler {
     }
 
     private int calculateOptions(String text) {
-        boolean hasDigits = containsDigits(text);
-        boolean hasUrl = containsUrl(text);
+        boolean hasDigits = StringUtils.containsDigits(text);
+        boolean hasUrl = StringUtils.containsUrl(text);
 
         if (hasDigits && hasUrl) {
             return IGNORE_URLS_AND_DIGITS;
@@ -58,19 +70,5 @@ public class CorrectionTaskScheduler {
             return IGNORE_URLS;
         }
         return 0;
-    }
-
-    private boolean containsDigits(String text) {
-        return text != null && text.matches(".*\\d.*");
-    }
-
-    private boolean containsUrl(String text) {
-        if (text == null) return false;
-
-        // Простая проверка на наличие URL
-        return text.contains("http://") ||
-                text.contains("https://") ||
-                text.contains("www.") ||
-                text.matches(".*\\.[a-zA-Z]{2,3}([/\\s].*|$)");
     }
 }
