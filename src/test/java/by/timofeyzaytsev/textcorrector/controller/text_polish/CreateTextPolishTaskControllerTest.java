@@ -36,7 +36,7 @@ public class CreateTextPolishTaskControllerTest {
     private CreateTextPolishTaskHandler handler;
 
     @Test
-    void createTextPolishTask_ShouldReturnTaskId_WhenRequestIsValid() throws Exception {
+    void createTask_ShouldReturnTaskId_WhenRequestIsValid() throws Exception {
         // Arrange
         CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "Hello World",
@@ -58,7 +58,7 @@ public class CreateTextPolishTaskControllerTest {
     }
 
     @Test
-    void createTextPolishTask_ShouldReturnBadRequest_WhenIsEmptyTask() throws Exception {
+    void createTask_ShouldReturnBadRequest_WhenIsEmptyTask() throws Exception {
         // Arrange
         CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "",
@@ -73,7 +73,7 @@ public class CreateTextPolishTaskControllerTest {
     }
 
     @Test
-    void createTextPolishTask_ShouldReturnBadRequest_WhenHasLessThenThreeLettersTask() throws Exception {
+    void createTask_ShouldReturnBadRequest_WhenHasLessThenThreeLettersTask() throws Exception {
         // Arrange
         CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "as",
@@ -88,7 +88,7 @@ public class CreateTextPolishTaskControllerTest {
     }
 
     @Test
-    void createTextPolishTask_ShouldReturnBadRequest_WhenHasNoLetterTask() throws Exception {
+    void createTask_ShouldReturnBadRequest_WhenHasNoLetterTask() throws Exception {
         // Arrange
         CreateTextPolishTaskRequest request = new CreateTextPolishTaskRequest(
                 "123%&",

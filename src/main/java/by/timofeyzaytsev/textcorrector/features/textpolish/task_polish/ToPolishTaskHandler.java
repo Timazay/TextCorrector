@@ -15,7 +15,7 @@ import static by.timofeyzaytsev.textcorrector.features.textpolish.common.StringU
 @RequiredArgsConstructor
 public class ToPolishTaskHandler {
 
-    private final ToCheckTextClient toCheckTextClient;
+    private final CallYandexSpellerClient callYandexSpellerClient;
     private static final int MAX_TEXT_LENGTH = 10000;
 
     /**
@@ -27,7 +27,7 @@ public class ToPolishTaskHandler {
         return list.stream()
                 .map(textBlock -> {
                     List<List<YandexSpellerCheckResponse>> responses =
-                            toCheckTextClient.checkText(task.getText(), task.getLanguage().name(),
+                            callYandexSpellerClient.execute(task.getText(), task.getLanguage().name(),
                                     ignoreDigits, ignoreUrls);
 
                     List<YandexSpellerCheckResponse> flatResponses = responses.stream()

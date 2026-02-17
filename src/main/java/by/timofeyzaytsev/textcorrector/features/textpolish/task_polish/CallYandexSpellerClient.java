@@ -9,7 +9,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ToCheckTextClient {
+public class CallYandexSpellerClient {
 
     private final YandexSpellerApiClient yandexSpellerApiClient;
     private final ToPolishTaskMapper textPolishTaskMapper;
@@ -17,7 +17,7 @@ public class ToCheckTextClient {
     private final static int IGNORE_URLS = 4;
 
     @Retryable
-    public List<List<YandexSpellerCheckResponse>> checkText(String text, String language, boolean ignoreDigits, boolean ignoreUrls) {
+    public List<List<YandexSpellerCheckResponse>> execute(String text, String language, boolean ignoreDigits, boolean ignoreUrls) {
         YandexSpellerCheckRequest request = textPolishTaskMapper.toYandexSpellerCheckRequest(language,
                 List.of(text), calculateOptions(ignoreDigits, ignoreUrls));
 

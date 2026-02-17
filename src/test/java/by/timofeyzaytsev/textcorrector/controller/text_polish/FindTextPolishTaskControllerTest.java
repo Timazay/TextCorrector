@@ -36,7 +36,7 @@ public class FindTextPolishTaskControllerTest {
     private FindTextPolishTaskHandler handler;
 
     @Test
-    void findTextPolishTask_WhenTaskFinished_ShouldReturnResponseWithTask() throws Exception {
+    void getTask_WhenTaskFinished_ShouldReturnResponseWithTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
         FindTextPolishTaskResponse expectedResponse = new FindTextPolishTaskResponse(
@@ -60,7 +60,7 @@ public class FindTextPolishTaskControllerTest {
     }
 
     @Test
-    void findTextPolishTask_WhenTaskIsFailed_ShouldReturnResponseWithNullTask() throws Exception {
+    void getTask_WhenTaskIsFailed_ShouldReturnResponseWithNullTask() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
         FindTextPolishTaskResponse expectedResponse = new FindTextPolishTaskResponse(
@@ -84,7 +84,7 @@ public class FindTextPolishTaskControllerTest {
     }
 
     @Test
-    void findTextPolishTask_WhenTaskIsProcessing_ShouldReturnResponseWithStatus() throws Exception {
+    void getTask_WhenTaskIsProcessing_ShouldReturnResponseWithStatus() throws Exception {
         // Arrange
         UUID testId = UUID.randomUUID();
         FindTextPolishTaskResponse expectedResponse = new FindTextPolishTaskResponse(

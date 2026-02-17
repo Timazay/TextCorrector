@@ -53,7 +53,7 @@ public class FindTextPolishTaskController {
                     )
             )
     })
-    public FindTextPolishTaskResponse findTextPolishTask(@PathVariable UUID taskId) {
+    public FindTextPolishTaskResponse getTask(@PathVariable UUID taskId) {
         return handler.execute(taskId);
     }
 }

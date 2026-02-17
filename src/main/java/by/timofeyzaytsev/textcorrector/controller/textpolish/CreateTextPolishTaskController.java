@@ -46,7 +46,7 @@ public class CreateTextPolishTaskController {
             )
     })
     @PostMapping
-    public CreateTextPolishTaskResponse createTextPolishTask(@Valid @RequestBody CreateTextPolishTaskRequest request) {
+    public CreateTextPolishTaskResponse createTask(@Valid @RequestBody CreateTextPolishTaskRequest request) {
         return handler.execute(request);
     }
 }
