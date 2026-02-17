@@ -4,6 +4,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableFeignClients(basePackages = "by.timofeyzaytsev.textcorrector.client")
+@EnableFeignClients(basePackages = "by.timofeyzaytsev.textcorrector.infrastructure.client")
 public class FeignClientConfig {
 }
