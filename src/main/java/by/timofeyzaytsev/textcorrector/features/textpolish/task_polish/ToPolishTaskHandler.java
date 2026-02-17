@@ -13,7 +13,7 @@ import static by.timofeyzaytsev.textcorrector.features.textpolish.common.StringU
 
 @Service
 @RequiredArgsConstructor
-public class ToPolishTextHandler {
+public class ToPolishTaskHandler {
 
     private final ToCheckTextClient toCheckTextClient;
     private static final int MAX_TEXT_LENGTH = 10000;

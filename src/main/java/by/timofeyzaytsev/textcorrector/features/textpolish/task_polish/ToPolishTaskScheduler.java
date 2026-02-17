@@ -18,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ToPolishTaskScheduler {
 
-    private final ToPolishTextHandler handler;
+    private final ToPolishTaskHandler handler;
     private final TextPolishTaskRepository textPolishTaskRepository;
     private final ToPolishTaskMapper toPolishTaskMapper;
 
