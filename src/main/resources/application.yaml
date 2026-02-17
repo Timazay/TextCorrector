@@ -23,6 +23,11 @@ spring:
             read-timeout: 5000
             connect-timeout: 5000
             url: https://speller.yandex.net/services/spellservice.json
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /text-polish/swagger-ui.html
 logging:
   level:
     org.springframework.web.servlet.DispatcherServlet: DEBUG

@@ -1,11 +1,16 @@
 package by.timofeyzaytsev.textcorrector.features.textpolish.create_task;
 
 import by.timofeyzaytsev.textcorrector.infrastructure.entity.enums.Language;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record CreateTextPolishTaskRequest(
+        @Schema(
+                description = "Text to be polished",
+                example = "Hello world! How are you doing?"
+        )
         @NotBlank(message = "Text cannot be empty")
         @Size(min = 3, message = "Text must have at least 3 symbols")
         @Pattern(
@@ -14,6 +19,12 @@ public record CreateTextPolishTaskRequest(
                 message = "Text must contain at least one letter"
         )
         String text,
+
+        @Schema(
+                description = "Language of the text",
+                example = "EN",
+                allowableValues = {"EN", "RU"}
+        )
         Language language
 ) {
 }
