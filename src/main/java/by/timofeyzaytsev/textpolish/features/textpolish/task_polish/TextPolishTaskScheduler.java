@@ -1,6 +1,5 @@
 package by.timofeyzaytsev.textpolish.features.textpolish.task_polish;
 
-import by.timofeyzaytsev.textpolish.common.exception.ProcessingLimitException;
 import by.timofeyzaytsev.textpolish.features.textpolish.common.StringUtils;
 import by.timofeyzaytsev.textpolish.infrastructure.entity.TextPolishTask;
 import by.timofeyzaytsev.textpolish.infrastructure.entity.enums.TextPolishTaskStatus;
@@ -36,15 +35,15 @@ public class TextPolishTaskScheduler {
 
     private void processSingleTask(TextPolishTask task) {
         try {
-            if (task.getCount() > MAX_COUNT)
-                throw new ProcessingLimitException("processing limit exceeded");
             String text = handler.execute(task, StringUtils
                     .containsDigits(task.getText()), StringUtils.containsUrl(task.getText()));
             textPolishTaskMapper.toFinishTask(task, text);
         } catch (Exception e) {
             log.error("Error processing Yandex API response, task with id: {}", task.getId(), e);
-            task.setErrorDescription("Error processing Yandex API response: " + e.getMessage());
-            task.setStatus(TextPolishTaskStatus.FAILED);
+            if (task.getCount() > MAX_COUNT) {
+                task.setErrorDescription("Error processing Yandex API response: " + e.getMessage());
+                task.setStatus(TextPolishTaskStatus.FAILED);
+            }
         }
         textPolishTaskRepository.save(task);
     }

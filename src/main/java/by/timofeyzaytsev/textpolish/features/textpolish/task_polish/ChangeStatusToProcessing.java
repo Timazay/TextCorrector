@@ -20,7 +20,7 @@ public class ChangeStatusToProcessing {
     @Transactional
     public List<TextPolishTask> change() {
         List<TextPolishTask> tasks = textPolishTaskRepository
-                .findNewAndProcessingTasks(PageRequest.of(0, 10));
+                .findNewAndProcessingTasks(PageRequest.of(0, 10), LocalDateTime.now());
 
         tasks.stream()
                 .peek(task -> task.setCount(task.getCount() + 1))

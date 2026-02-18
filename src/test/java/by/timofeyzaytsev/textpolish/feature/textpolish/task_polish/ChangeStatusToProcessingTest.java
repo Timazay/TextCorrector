@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,8 +62,8 @@ public class ChangeStatusToProcessingTest {
     void change_WhenFindListOfNewAndProcessingTasks_ShouldReturnProcessingTasks() {
         // Assert
         List<TextPolishTask> mockTasks = Arrays.asList(newTaskOne, newTaskTwo, processingTask);
-
-        when(textPolishTaskRepository.findNewAndProcessingTasks(PageRequest.of(0, 10)))
+        when(textPolishTaskRepository
+                .findNewAndProcessingTasks(eq(PageRequest.of(0, 10)), any(LocalDateTime.class)))
                 .thenReturn(mockTasks);
 
         // Act
@@ -69,7 +71,7 @@ public class ChangeStatusToProcessingTest {
 
         // Arrange
         verify(textPolishTaskRepository, times(1))
-                .findNewAndProcessingTasks(PageRequest.of(0, 10));
+                .findNewAndProcessingTasks(eq(PageRequest.of(0, 10)), any(LocalDateTime.class));
 
         assertThat(newTaskOne.getStatus()).isEqualTo(TextPolishTaskStatus.PROCESSING);
         assertThat(newTaskOne.getCount()).isEqualTo(1);

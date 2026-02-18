@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,8 +20,8 @@ public interface TextPolishTaskRepository extends JpaRepository<TextPolishTask, 
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "jakarta.persistence.lock.timeout", value = "-2")})
-    @Query("SELECT tpt FROM TextPolishTask tpt WHERE tpt.status = 'NEW_TASK' or (tpt.status = 'PROCESSING' and tpt.expiration < CURRENT_DATE )")
-    List<TextPolishTask> findNewAndProcessingTasks(Pageable pageable);
+    @Query("SELECT tpt FROM TextPolishTask tpt WHERE tpt.status = 'NEW_TASK' or (tpt.status = 'PROCESSING' and tpt.expiration < :now)")
+    List<TextPolishTask> findNewAndProcessingTasks(Pageable pageable, LocalDateTime now);
 
     Optional<TextPolishTask> findById(UUID id);
 }

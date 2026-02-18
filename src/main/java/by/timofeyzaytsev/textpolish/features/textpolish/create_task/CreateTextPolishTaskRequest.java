@@ -3,6 +3,7 @@ package by.timofeyzaytsev.textpolish.features.textpolish.create_task;
 import by.timofeyzaytsev.textpolish.infrastructure.entity.enums.Language;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -20,6 +21,7 @@ public record CreateTextPolishTaskRequest(
         )
         String text,
 
+        @NotNull(message = "Language cannot be null")
         @Schema(
                 description = "Language of the text",
                 example = "EN",

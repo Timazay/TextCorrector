@@ -7,6 +7,9 @@ import by.timofeyzaytsev.textpolish.features.textpolish.task_polish.TextPolishTa
 import by.timofeyzaytsev.textpolish.infrastructure.entity.TextPolishTask;
 import by.timofeyzaytsev.textpolish.infrastructure.entity.enums.TextPolishTaskStatus;
 import by.timofeyzaytsev.textpolish.infrastructure.repository.TextPolishTaskRepository;
+import feign.FeignException;
+import feign.Request;
+import feign.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -118,13 +121,29 @@ public class TextPolishTaskSchedulerTest {
         processingTaskOne.setCount(4);
         List<TextPolishTask> tasks = List.of(processingTaskOne);
         when(changeStatusToProcessing.change()).thenReturn(tasks);
+        when(handler.execute(any(TextPolishTask.class), anyBoolean(), anyBoolean()))
+                .thenThrow(FeignException.errorStatus(
+                        "methodKey",
+                        Response.builder()
+                                .status(408 )
+                                .reason("Timeout")
+                                .request(Request.create(
+                                        Request.HttpMethod.POST,
+                                        "http://yandex.com",
+                                        Collections.emptyMap(),
+                                        new byte[0],
+                                        StandardCharsets.UTF_8,
+                                        null
+                                ))
+                                .build()
+                ));
 
         // Act
         scheduler.processTexts();
 
         // Assert
         verify(changeStatusToProcessing, times(1)).change();
-        verify(handler, never()).execute(any(), anyBoolean(), anyBoolean());
+        verify(handler, times(1)).execute(any(), anyBoolean(), anyBoolean());
         verify(textPolishTaskMapper, never()).toFinishTask(any(), any());
 
         verify(textPolishTaskRepository).save(taskCaptor.capture());
@@ -132,7 +151,7 @@ public class TextPolishTaskSchedulerTest {
 
         assertThat(savedTask.getId()).isEqualTo(processingTaskOne.getId());
         assertThat(savedTask.getStatus()).isEqualTo(TextPolishTaskStatus.FAILED);
-        assertThat(savedTask.getErrorDescription()).contains("processing limit exceeded");
+        assertThat(savedTask.getErrorDescription()).contains("Timeout");
     }
 
     @Test

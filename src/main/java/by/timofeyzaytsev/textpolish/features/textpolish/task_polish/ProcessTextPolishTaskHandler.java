@@ -22,8 +22,7 @@ public class ProcessTextPolishTaskHandler {
 
     /**
      * The method sends a request to the post checkText method in parts (if the string exceeds MAX_TEXT_LENGTH characters)
-     *
-     * @return returns a string with the corrected text.
+     * @return returns a string with the polished text.
      */
     public String execute(TextPolishTask task, boolean ignoreDigits, boolean ignoreUrls) {
         List<String> blocks = splitIntoBlocks(task.getText(), MAX_TEXT_LENGTH);
@@ -41,10 +40,9 @@ public class ProcessTextPolishTaskHandler {
 
     /**
      * Method for correcting text based on a Yandex API response
-     *
      * @param task        : original text
      * @param corrections : list of corrections from the API
-     * @return : corrected text
+     * @return : polished text
      */
     private String processResponse(String task, List<YandexSpellerCheckResponse> corrections) {
         StringBuilder correctedText = new StringBuilder(task);
