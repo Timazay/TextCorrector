@@ -11,6 +11,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Scheduler for automatic processing of text polishing tasks.
+ * Runs every 5 seconds, receives tasks with PROCESSING status, and executes them in parallel.
+ * In case of an error, increments the retry counter, and if the maximum number (MAX_COUNT) is exceeded, sets the task to FAILED.
+ */
 
 @Component
 @Slf4j
