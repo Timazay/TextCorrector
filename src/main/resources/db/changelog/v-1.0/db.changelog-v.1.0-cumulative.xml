@@ -4,5 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
     <include file="00-create-text_polish_tasks-table.xml" relativeToChangelogFile="true"/>
+    <include file="01-add-index-on-status.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

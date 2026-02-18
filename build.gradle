@@ -25,7 +25,6 @@ ext {
 	lombokMapstructVersion = '0.2.0'
 	springCloudVersion = '2025.0.0'
 	springdocVersion = '2.8.15'
-	springRetry = '2.0.12'
 }
 
 repositories {
@@ -55,7 +54,6 @@ dependencies {
 	annotationProcessor "org.projectlombok:lombok-mapstruct-binding:${lombokMapstructVersion}"
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-	implementation "org.springframework.retry:spring-retry:${springRetry}"
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
 
 	// Tests

@@ -27,6 +27,12 @@
                 <constraints nullable="false"/>
             </column>
 
+            <column name="count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="expiration" type="TIMESTAMP"/>
+
             <column name="error_description" type="VARCHAR(255)"/>
 
             <column name="status" type="VARCHAR(50)">

@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="add-index-on-status" author="Зайцев Тимофей">
+        <preConditions onFail="HALT">
+            <not>
+                <indexExists indexName="idx_text_polish_tasks_status"/>
+            </not>
+        </preConditions>
+
+        <createIndex indexName="idx_text_polish_tasks_status"
+                     tableName="text_polish_tasks">
+            <column name="status"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
