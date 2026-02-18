@@ -1,6 +1,6 @@
 spring:
   application:
-    name: TextCorrector
+    name: text-polish
   datasource:
     driverClassName: org.postgresql.Driver
     url: ${SPRING_DATA_SOURCE_URL:jdbc:postgresql://localhost:5432/text_polish_db}
