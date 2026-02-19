@@ -1,0 +1,43 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="create-text_polish_tasks-table" author="Зайцев Тимофей">
+        <preConditions onFail="HALT">
+            <not>
+                <tableExists tableName="text_polish_tasks"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="text_polish_tasks">
+
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"
+                             primaryKeyName="pk_correction_task"
+                             nullable="false"/>
+            </column>
+
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="language" type="TINYINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="count" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="expiration" type="TIMESTAMP"/>
+
+            <column name="error_description" type="VARCHAR(255)"/>
+
+            <column name="status" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

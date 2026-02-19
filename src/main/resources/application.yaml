@@ -1,3 +1,37 @@
 spring:
   application:
-    name: TextCorrector
+    name: text-polish
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${SPRING_DATA_SOURCE_URL:jdbc:postgresql://localhost:5432/text_polish_db}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  cloud:
+    openfeign:
+      client:
+        config:
+          yandexSpeller:
+            read-timeout: 5000
+            connect-timeout: 5000
+            url: https://speller.yandex.net/services/spellservice.json
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /text-polish/swagger-ui.html
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.orm.jpa: INFO
+    org.springframework.transaction: INFO
+    org.springframework.transaction.interceptor: TRACE
+    org.springframework.orm.jpa.JpaTransactionManager: DEBUG
