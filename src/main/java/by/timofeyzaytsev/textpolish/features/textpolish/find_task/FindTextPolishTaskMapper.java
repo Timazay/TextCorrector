@@ -6,5 +6,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface FindTextPolishTaskMapper {
 
-    FindTextPolishTaskResponse toFindCorrectionTaskResponse(TextPolishTask task);
+    FindTextPolishTaskResponse toFindTextPolishTaskResponse(TextPolishTask task);
 }

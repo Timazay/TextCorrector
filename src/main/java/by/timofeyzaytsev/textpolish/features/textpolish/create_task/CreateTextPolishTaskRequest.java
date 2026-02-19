@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record CreateTextPolishTaskRequest(
         @Schema(
                 description = "Text to be polished",
-                example = "Hello world! How are you doing?"
+                example = "Hallo world! How ara you doing?"
         )
         @NotBlank(message = "Text cannot be empty")
         @Size(min = 3, message = "Text must have at least 3 symbols")

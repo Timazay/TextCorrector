@@ -55,7 +55,7 @@ public class FindProcessTextPolishTaskHandlerTest {
 
         when(textPolishTaskRepository.findById(testId))
                 .thenReturn(Optional.of(finishedTask));
-        when(findTextPolishTaskMapper.toFindCorrectionTaskResponse(finishedTask))
+        when(findTextPolishTaskMapper.toFindTextPolishTaskResponse(finishedTask))
                 .thenReturn(expectedResponse);
 
         // Act
@@ -69,7 +69,7 @@ public class FindProcessTextPolishTaskHandlerTest {
         assertNull(actualResponse.errorDescription());
 
         verify(textPolishTaskRepository).findById(testId);
-        verify(findTextPolishTaskMapper).toFindCorrectionTaskResponse(finishedTask);
+        verify(findTextPolishTaskMapper).toFindTextPolishTaskResponse(finishedTask);
         verifyNoMoreInteractions(textPolishTaskRepository, findTextPolishTaskMapper);
     }
 
@@ -90,7 +90,7 @@ public class FindProcessTextPolishTaskHandlerTest {
 
         when(textPolishTaskRepository.findById(testId))
                 .thenReturn(Optional.of(inProgressTask));
-        when(findTextPolishTaskMapper.toFindCorrectionTaskResponse(argThat(task ->
+        when(findTextPolishTaskMapper.toFindTextPolishTaskResponse(argThat(task ->
                 task.getStatus() == TextPolishTaskStatus.PROCESSING &&
                         task.getText() == null
         ))).thenReturn(expectedResponse);
@@ -104,7 +104,7 @@ public class FindProcessTextPolishTaskHandlerTest {
         assertEquals(TextPolishTaskStatus.PROCESSING, actualResponse.status());
 
         verify(textPolishTaskRepository).findById(testId);
-        verify(findTextPolishTaskMapper).toFindCorrectionTaskResponse(argThat(task -> {
+        verify(findTextPolishTaskMapper).toFindTextPolishTaskResponse(argThat(task -> {
             assertNull(task.getText());
             return true;
         }));
@@ -126,6 +126,6 @@ public class FindProcessTextPolishTaskHandlerTest {
         assertEquals("Task with id: " + testId + " not found", exception.getMessage());
 
         verify(textPolishTaskRepository).findById(testId);
-        verify(findTextPolishTaskMapper, never()).toFindCorrectionTaskResponse(any());
+        verify(findTextPolishTaskMapper, never()).toFindTextPolishTaskResponse(any());
     }
 }

@@ -23,6 +23,6 @@ public class FindTextPolishTaskHandler {
         if (!task.getStatus().equals(TextPolishTaskStatus.FINISHED))
             task.setText(null);
 
-        return findTextPolishTaskMapper.toFindCorrectionTaskResponse(task);
+        return findTextPolishTaskMapper.toFindTextPolishTaskResponse(task);
     }
 }
